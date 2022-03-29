@@ -1,0 +1,72 @@
+﻿using System.Net;
+using System.Net.Sockets;
+
+namespace System.HttpProxy
+{
+    /// <summary>
+    /// HTTP服务
+    /// 创建人：YTS
+    /// 创建时间：2019-3-4
+    /// </summary>
+    public class HttpServer:IDisposable
+    {        
+        private Socket _serverSocket = null;
+        private int _maxSize = 50;
+
+        private static int _port = 8655;
+
+        public static int GetPort()
+        {
+            return _port;
+        }
+
+        public void Dispose()
+        {
+            if (_serverSocket != null)
+            {
+                _serverSocket.Close();
+                _serverSocket = null;
+            }
+        }
+
+        public void Run(int? port = null)
+        {
+            if (port != null) _port = port.Value;
+            Run(_port);
+        }
+        public void Run(int port)
+        {
+            Dispose();
+            _serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            _serverSocket.Bind(new IPEndPoint(IPAddress.Any, _port));         
+            _serverSocket.Listen(100);
+            _serverSocket.BeginAccept(new AsyncCallback(Accept), _serverSocket);
+        }
+
+        private void Accept(IAsyncResult ar)
+        {
+            try
+            {
+                Socket socket = ar.AsyncState as Socket;
+                Socket client = socket.EndAccept(ar);                
+                var request = new HttpClient(client);
+                //记录请求
+                //HttpClientCollection.Add(request);              
+                request.Disposed += new HttpClient.Dispose(RemoveRequest);
+                //权限鉴定
+                request.Deal(_maxSize);   //处理             
+                
+                socket.BeginAccept(new AsyncCallback(Accept), socket);                
+            }
+            catch(Exception ex)
+            {
+                //发生错误                 
+            }
+        }
+
+        private void RemoveRequest(string id)
+        {
+            //HttpClientCollection.Remove(id);
+        }
+    }
+}
