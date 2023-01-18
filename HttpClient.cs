@@ -197,6 +197,7 @@ namespace System.HttpProxy
                         //跨域设置
                         _response.Headers.Add("Access-Control-Allow-Origin", _request.Headers["Origin"]);
                         _response.Headers.Add("Access-Control-Allow-Credentials", "true");
+                        _response.Headers.Add("Vary", "Origin");
                     }
 
                     if (result.ContentType != null && result.ContentType.Length > 0)
