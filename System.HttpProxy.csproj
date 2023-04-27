@@ -44,10 +44,12 @@
     <Compile Include="ActionContext.cs" />
     <Compile Include="HttpBuffer.cs" />
     <Compile Include="HttpClientCollection.cs" />
+    <Compile Include="MimeMapping.cs" />
     <Compile Include="ResponseStatus.cs" />
     <Compile Include="Result\DirectResult.cs" />
     <Compile Include="Result\ErrorResult.cs" />
     <Compile Include="FromBodyAttribute.cs" />
+    <Compile Include="Result\FileResult.cs" />
     <Compile Include="Result\JsonResult.cs" />
     <Compile Include="Result\ActionResult.cs" />
     <Compile Include="Controller\ApiController.cs" />
