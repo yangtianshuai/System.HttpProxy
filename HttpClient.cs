@@ -278,6 +278,19 @@ namespace System.HttpProxy
             }
         }
 
+        //private void SendAsync(byte[] buffer)
+        //{
+        //    handler.BeginSend(buffer, 0, buffer.Length, 0,new AsyncCallback(SendCallback), _socket);
+        //}
+
+        private void SendCallback(IAsyncResult ar)
+        {                     
+            Socket handler = (Socket)ar.AsyncState;  
+            handler.EndSend(ar);          
+            handler.Shutdown(SocketShutdown.Both);
+            handler.Close();            
+        }
+
         void IDisposable.Dispose()
         {
             _socket = null;
