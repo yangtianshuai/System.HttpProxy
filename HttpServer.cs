@@ -13,7 +13,7 @@ namespace System.HttpProxy
     {        
         private Socket _serverSocket = null;
         private int _maxSize = 50;
-        public static ManualResetEvent allDone = new ManualResetEvent(false);
+        //public static ManualResetEvent allDone = new ManualResetEvent(false);
 
         private static int _port = 8655;
 
@@ -43,14 +43,14 @@ namespace System.HttpProxy
             _serverSocket.Bind(new IPEndPoint(IPAddress.Any, _port));         
             _serverSocket.Listen(100);
             _serverSocket.BeginAccept(new AsyncCallback(Accept), _serverSocket);
-            allDone.WaitOne();
+            //allDone.WaitOne();
         }
 
         private void Accept(IAsyncResult ar)
         {            
             try
             {
-                allDone.Set();
+                //allDone.Set();
 
                 Socket socket = ar.AsyncState as Socket;
                 Socket client = socket.EndAccept(ar);                
@@ -61,9 +61,9 @@ namespace System.HttpProxy
                 //权限鉴定
                 request.Deal(_maxSize);   //处理             
                 
-                allDone.Reset();
+                //allDone.Reset();
                 socket.BeginAccept(new AsyncCallback(Accept), socket); 
-                allDone.WaitOne();               
+                //allDone.WaitOne();               
             }
             catch(Exception ex)
             {

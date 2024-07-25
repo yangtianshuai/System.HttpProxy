@@ -172,7 +172,7 @@ namespace System.HttpProxy
             }
             else
             {
-                _response.Status = ResponseStatus.BadRequest;
+                _response.Status = ResponseStatus.Forbidden;
                 result = new BadResult(_response.Status);
             }
 
